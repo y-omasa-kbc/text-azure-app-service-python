@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Todoリスト - ToDo アプリ{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Todo リスト</h1>
+
+{# Todo 登録フォームは次回以降の演習で実装します (コメントアウト)
+<div class="card mb-4">
+    ... (登録フォームのHTML) ...
+</div>
+#}
+
+<h2>未完了の Todo</h2>
+{% if todos_incomplete %}
+    <ul class="list-group mb-4">
+        {% for todo in todos_incomplete %}
+        <li class="list-group-item {% if todo.completed %}completed-todo{% endif %}">
+            <div>
+                <strong>{{ todo.title }}</strong>
+                {% if todo.due_date %}
+                    <small class="d-block text-muted">期限: {{ todo.due_date.strftime('%Y-%m-%d') }}</small>
+                {% endif %}
+                {% if todo.memo %}
+                    <small class="d-block text-muted">メモ: {{ todo.memo }}</small>
+                {% endif %}
+            </div>
+            {# 操作ボタン類は次回以降の演習で実装します (コメントアウト)
+            <div>
+                ... (操作ボタンのHTML) ...
+            </div>
+            #}
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>未完了の Todo はありません。</p>
+{% endif %}
+
+<h2>完了済みの Todo</h2>
+{% if todos_complete %}
+    <ul class="list-group mb-4">
+        {% for todo in todos_complete %}
+        <li class="list-group-item {% if todo.completed %}completed-todo{% endif %}">
+            <div>
+                <strong>{{ todo.title }}</strong>
+                 {% if todo.due_date %}
+                    <small class="d-block text-muted">期限: {{ todo.due_date.strftime('%Y-%m-%d') }}</small>
+                {% endif %}
+            </div>
+            {# 操作ボタン類は次回以降の演習で実装します (コメントアウト)
+            <div>
+                ... (操作ボタンのHTML) ...
+            </div>
+            #}
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>完了済みの Todo はありません。</p>
+{% endif %}
+
+{% endblock %}
