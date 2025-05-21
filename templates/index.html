@@ -5,11 +5,27 @@
 {% block content %}
 <h1 class="mb-4">Todo リスト</h1>
 
-{# Todo 登録フォームは次回以降の演習で実装します (コメントアウト)
+<!-- ToDo登録フォーム -->
 <div class="card mb-4">
-    ... (登録フォームのHTML) ...
+    <div class="card-header">新しいTodoを追加</div>
+    <div class="card-body">
+        <form action="{{ url_for('add_todo') }}" method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">タイトル</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="due_date" class="form-label">期限日（任意）</label>
+                <input type="date" class="form-control" id="due_date" name="due_date">
+            </div>
+            <div class="mb-3">
+                <label for="memo" class="form-label">メモ（任意）</label>
+                <textarea class="form-control" id="memo" name="memo" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">追加</button>
+        </form>
+    </div>
 </div>
-#}
 
 <h2>未完了の Todo</h2>
 {% if todos_incomplete %}
