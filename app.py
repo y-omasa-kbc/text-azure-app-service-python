@@ -15,13 +15,14 @@ db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
 db_host = os.getenv('DB_HOST')
 db_name = os.getenv('DB_NAME')
-
+print( f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}?charset=utf8')
 # pymysql を使用する場合の接続文字列
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}?charset=utf8'
 # データベースの変更を追跡しない (パフォーマンス向上のため)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # flash メッセージ用のシークレットキー (次回以降で使用)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key') # .env に SECRET_KEY を設定するか、直接文字列を指定
+app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
 
 # データベースインスタンスを Flask アプリケーションに紐付け
 db.init_app(app)
