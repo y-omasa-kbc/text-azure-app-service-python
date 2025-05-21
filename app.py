@@ -51,9 +51,44 @@ def index():
         todos_complete = []
     return render_template('index.html', todos_incomplete=todos_incomplete, todos_complete=todos_complete)
 
-# --- ここから下は次回以降の演習で実装する機能のルーティングです (コメントアウト) ---
-# @app.route('/add', methods=['POST'])
-# def add_todo(): ...
+# --- 実装済みの機能のルーティング ---
+@app.route('/add', methods=['POST'])
+def add_todo():
+    """新しいTodoを追加する"""
+    try:
+        title = request.form.get('title')
+        due_date_str = request.form.get('due_date')
+        memo = request.form.get('memo')
+        
+        # タイトルは必須
+        if not title:
+            flash('タイトルは必須です', 'danger')
+            return redirect(url_for('index'))
+        
+        # 新しいTodoオブジェクトを作成
+        new_todo = Todo(title=title, memo=memo)
+        
+        # 期限日が入力されていれば設定
+        if due_date_str:
+            try:
+                due_date = datetime.strptime(due_date_str, '%Y-%m-%d').date()
+                new_todo.due_date = due_date
+            except ValueError:
+                flash('期限日の形式が正しくありません', 'warning')
+        
+        # データベースに保存
+        db.session.add(new_todo)
+        db.session.commit()
+        
+        flash('Todoが追加されました', 'success')
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error adding todo: {e}")
+        flash('Todoの追加中にエラーが発生しました', 'danger')
+    
+    return redirect(url_for('index'))
+
+# --- 以下は次回以降の演習で実装する機能のルーティングです (コメントアウト) ---
 # @app.route('/todo/<int:todo_id>')
 # def todo_detail(todo_id): ...
 # (その他のビュー関数もコメントアウト)
