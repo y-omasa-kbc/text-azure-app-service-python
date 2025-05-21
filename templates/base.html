@@ -17,12 +17,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Flask ToDo アプリ (一覧表示編)</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Flask ToDo アプリ (一覧・登録編)</a>
         </div>
     </nav>
 
     <div class="container">
-        {# flash メッセージ表示エリア (次回以降の演習で使用)
+        <!-- フラッシュメッセージ表示エリア -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="flash-messages">
@@ -35,7 +35,6 @@
                 </div>
             {% endif %}
         {% endwith %}
-        #}
 
         {% block content %}
         {% endblock %}
