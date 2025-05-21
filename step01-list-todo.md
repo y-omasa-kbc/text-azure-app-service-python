@@ -276,17 +276,18 @@ Azure 公式サイト: https://azure.microsoft.com/
 Azure Portal (https://portal.azure.com/) にサインインし、以下の手順で Azure Database for MySQL (フレキシブルサーバー) を作成します。
 「＋ リソースの作成」 > 「Azure Database for MySQL」を検索・選択。
 「フレキシブル サーバー」を選択して「作成」。
-基本設定:
+- 基本設定:
 リソース グループ: 新規作成 (例: rg-todo-app)。
-サーバー名: グローバルに一意な名前 (例: mysql-todo-app-yourname)。
-リージョン: (例: Japan East)。
-MySQL バージョン: (例: 8.0)。
-ワークロードの種類: 「開発/テスト」。コンピューティングとストレージは最小構成で開始可能。
+- サーバー名: グローバルに一意な名前 (例: mysql-todo-app-yourname)。
+- リージョン: (例: Japan East)。
+- MySQL バージョン: (例: 8.0)。
+- ワークロードの種類: 「開発/テスト」。コンピューティングとストレージは最小構成で開始可能。
 管理者ユーザー名とパスワード: 設定し、必ず控えておく。
-ネットワーク設定:
-接続方法: 「パブリック アクセス (許可された IP アドレス)」。
-ファイアウォール規則: 「現在のクライアント IP アドレスを追加」し、「Azure サービスからのパブリック アクセスを許可する」をオンにする。
+- ネットワーク設定:
+- 接続方法: 「パブリック アクセス (許可された IP アドレス)」。
+- ファイアウォール規則: 「現在のクライアント IP アドレスを追加」し、「Azure サービスからのパブリック アクセスを許可する」をオンにする。
 「確認および作成」 > 「作成」。
+
 デプロイ完了後、作成した Azure Database for MySQL サーバーに接続し (ローカルの mysql コマンドラインクライアントや MySQL Workbench を使用)、アプリケーション用のデータベース (例: todo_app_azure) を CLI で作成します。
 ```
 CREATE DATABASE todo_app_azure CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -297,14 +298,15 @@ CREATE DATABASE todo_app_azure CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ### Azure App Service の作成
 Azure Portal で Web App を作成します。
 「＋ リソースの作成」 > 「Web App」を検索・選択。
-基本設定:
+- 基本設定:
 リソース グループ: 上記で作成したものを選択。
-名前: グローバルに一意なアプリ名 (例: flask-todo-app-yourname)。
-公開: 「コード」。
-ランタイム スタック: 「Python 3.x」 (ローカル環境に合わせる)。
-オペレーティング システム: 「Linux」。
-リージョン: Azure Database for MySQL と同じリージョン。
-App Service プラン: 新規作成 (例: asp-todo-app)。SKU は「Free (F1)」または「Basic (B1)」で開始可能。
+- 名前: グローバルに一意なアプリ名 (例: flask-todo-app-yourname)。
+- 公開: 「コード」。
+- ランタイム スタック: 「Python 3.x」 (ローカル環境に合わせる)。
+- オペレーティング システム: 「Linux」。
+- リージョン: Azure Database for MySQL と同じリージョン。
+- App Service プラン: 新規作成 (例: asp-todo-app)。SKU は「Free (F1)」または「Basic (B1)」で開始可能。
+  
 「確認および作成」 > 「作成」。
 
 ## Azure へのデプロイ
@@ -317,16 +319,22 @@ Azure App Service の環境変数とスタートアップコマンドを Azure P
 #### アプリケーション設定 (環境変数)
 Azure Portal で作成した App Service に移動し、「構成」 > 「アプリケーション設定」タブを開きます。
 「＋ 新しいアプリケーション設定」をクリックし、以下の設定を追加・保存します。
+  
 名前: DB_USER
 値: Azure Database for MySQL の管理者ユーザー名 (例: azure_admin@mysql-todo-app-yourname)
+  
 名前: DB_PASSWORD
 値: Azure Database for MySQL の管理者パスワード
+  
 名前: DB_HOST
 値: Azure Database for MySQL のサーバー名 (例: mysql-todo-app-yourname.mysql.database.azure.com)
+  
 名前: DB_NAME
 値: Azure 上のデータベース名 (例: todo_app_azure)
+  
 名前: SECRET_KEY
-
+値：　（入力しない）
+  
 設定を追加したら、必ずページ上部の「保存」をクリックします。変更を適用するために App Service が再起動されることがあります。
 
 #### スタートアップコマンド
@@ -343,17 +351,24 @@ app:app: app.py ファイル内の Flask アプリケーションインスタン
 --preload: メモリ使用量を削減するのに役立ちます。
 #### データベーステーブルの初期化 (Azure 上)
 デプロイ後、App Service の「SSH」機能を使ってコンテナに接続し、flask init-db コマンドを実行して Azure Database for MySQL にテーブルを作成します。
+
 App Service の「SSH」 > 「移動 →」。
-ターミナルで cd /home/site/wwwroot。
-source /antenv/bin/activate (仮想環境をアクティベート)。
-flask init-db を実行。
+
+ターミナルで   
+```
+cd /home/site/wwwroot  
+source /antenv/bin/activate
+flask init-db   
+```
+を実行。
 
 ### VSCode を使用したデプロイ
 VSCode の Azure 拡張機能を使用します。
 Azure にサインイン。
 Azure ビューで App Service 名を右クリック > 「Deploy to Web App...」。
 デプロイするフォルダ (プロジェクトフォルダ) を選択し、確認後「Deploy」。
-5.5. Azure上データベースへのテストデータ投入 (CLI または MySQL Workbench)
+
+### Azure上データベースへのテストデータ投入 (CLI または MySQL Workbench)
 Azure Database for MySQL に接続し (ローカルの mysql コマンドラインクライアントや MySQL Workbench を使用。ファイアウォール設定確認)、テストデータを投入します。
 ```
 USE todo_app_azure; -- Azure 上のデータベース名
