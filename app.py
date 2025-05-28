@@ -1,7 +1,7 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash # request, redirect, url_for, flash は次回以降で使用
+from flask import Flask, render_template, request, redirect, url_for, flash
 from dotenv import load_dotenv
-from models import db, Todo, TodoLog # models.py からインポート
+from models import db, Todo, TodoLog
 from datetime import datetime
 
 # .env ファイルから環境変数を読み込む
@@ -85,6 +85,21 @@ def add_todo():
         db.session.rollback()
         app.logger.error(f"Error adding todo: {e}")
         flash('Todoの追加中にエラーが発生しました', 'danger')
+    
+    return redirect(url_for('index'))
+
+@app.route('/delete_todo/<int:todo_id>', methods=['POST'])
+def delete_todo(todo_id):
+    """指定されたIDのTodoを削除する"""
+    try:
+        todo_to_delete = Todo.query.get_or_404(todo_id)
+        db.session.delete(todo_to_delete)
+        db.session.commit()
+        flash('Todoが削除されました', 'success')
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error deleting todo {todo_id}: {e}")
+        flash('Todoの削除中にエラーが発生しました', 'danger')
     
     return redirect(url_for('index'))
 
