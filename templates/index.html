@@ -42,6 +42,9 @@
                 {% endif %}
             </div>
             <div>
+                <form action="{{ url_for('complete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-link text-success p-0 me-2">完了</button>
+                </form>
                 <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
                     <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('本当に削除しますか？');">削除</button>
                 </form>
@@ -65,6 +68,9 @@
                 {% endif %}
             </div>
             <div>
+                <form action="{{ url_for('incomplete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-link text-warning p-0 me-2">未完了にする</button>
+                </form>
                 <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
                     <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('本当に削除しますか？');">削除</button>
                 </form>
