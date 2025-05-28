@@ -41,11 +41,11 @@
                     <small class="d-block text-muted">メモ: {{ todo.memo }}</small>
                 {% endif %}
             </div>
-            {# 操作ボタン類は次回以降の演習で実装します (コメントアウト)
             <div>
-                ... (操作ボタンのHTML) ...
+                <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('本当に削除しますか？');">削除</button>
+                </form>
             </div>
-            #}
         </li>
         {% endfor %}
     </ul>
@@ -64,11 +64,11 @@
                     <small class="d-block text-muted">期限: {{ todo.due_date.strftime('%Y-%m-%d') }}</small>
                 {% endif %}
             </div>
-            {# 操作ボタン類は次回以降の演習で実装します (コメントアウト)
             <div>
-                ... (操作ボタンのHTML) ...
+                <form action="{{ url_for('delete_todo', todo_id=todo.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-link text-danger p-0" onclick="return confirm('本当に削除しますか？');">削除</button>
+                </form>
             </div>
-            #}
         </li>
         {% endfor %}
     </ul>
