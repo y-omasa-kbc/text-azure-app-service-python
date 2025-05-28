@@ -103,6 +103,38 @@ def delete_todo(todo_id):
     
     return redirect(url_for('index'))
 
+@app.route('/complete_todo/<int:todo_id>', methods=['POST'])
+def complete_todo(todo_id):
+    """指定されたIDのTodoを完了済みにする"""
+    try:
+        todo_to_complete = Todo.query.get_or_404(todo_id)
+        todo_to_complete.completed = True
+        todo_to_complete.updated_at = datetime.utcnow() # 更新日時を記録
+        db.session.commit()
+        flash('Todoが完了しました', 'success')
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error completing todo {todo_id}: {e}")
+        flash('Todoの完了中にエラーが発生しました', 'danger')
+    
+    return redirect(url_for('index'))
+
+@app.route('/incomplete_todo/<int:todo_id>', methods=['POST'])
+def incomplete_todo(todo_id):
+    """指定されたIDのTodoを未完了にする"""
+    try:
+        todo_to_incomplete = Todo.query.get_or_404(todo_id)
+        todo_to_incomplete.completed = False
+        todo_to_incomplete.updated_at = datetime.utcnow() # 更新日時を記録
+        db.session.commit()
+        flash('Todoが未完了になりました', 'success')
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f"Error incompleting todo {todo_id}: {e}")
+        flash('Todoの未完了化中にエラーが発生しました', 'danger')
+    
+    return redirect(url_for('index'))
+
 # --- 以下は次回以降の演習で実装する機能のルーティングです (コメントアウト) ---
 # @app.route('/todo/<int:todo_id>')
 # def todo_detail(todo_id): ...
